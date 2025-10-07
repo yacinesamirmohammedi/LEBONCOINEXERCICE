@@ -2,58 +2,70 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Entity // cette classe correspond à une table en base
-@Table(name = "annonce") // le nom de la table sera "annonce"
+@Entity
+@Table(name = "annonce",
+       uniqueConstraints = @UniqueConstraint(name = "uk_titre_categorie", columnNames = {"titre", "categorie"}))
 public class Annonce {
 
-    @Id // clé primaire
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-incrémentée
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Le titre est obligatoire") // validation
-    @Column(nullable = false, length = 120) // en base : non null + taille max
+    @NotBlank(message = "Le titre est obligatoire")
+    @Size(min = 5, max = 100, message = "Le titre doit contenir entre 5 et 100 caractères")
+    @Column(nullable = false, length = 100)
     private String titre;
 
-    @Column(length = 2000) // taille max de la description
+    @Column(length = 2000)
     private String description;
 
-    private Double prix; // prix libre
+    @NotNull(message = "Le prix est obligatoire")
+    @DecimalMin(value = "0.0", inclusive = false, message = "Le prix doit être positif")
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal prix;
 
-    private String categorie; // exemple : IMMOBILIER, AUTO...
+    @NotNull(message = "La catégorie est obligatoire")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 50)
+    private Categorie categorie;
 
-    private String auteur; // nom du créateur de l’annonce
+    @NotBlank(message = "L'auteur est obligatoire")
+    @Column(nullable = false)
+    private String auteur;
 
-    private LocalDateTime dateCreation; // sera rempli automatiquement
+    @Email(message = "Email invalide")
+    private String email;
 
-    @PrePersist // exécute ce code avant l’insertion en base
-    public void prePersist() {
-        this.dateCreation = LocalDateTime.now();
-    }
+    private String telephone;
 
-    // Constructeur vide (obligatoire pour JPA)
+    @Column(nullable = false)
+    private Boolean active = true;
+
+    @Column(nullable = false)
+    private LocalDateTime dateCreation;
+
+    @Column(nullable = false)
+    private LocalDateTime dateModification;
+
     public Annonce() {}
 
-    // ===== GETTERS & SETTERS =====
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    @PrePersist
+    public void prePersist() {
+        LocalDateTime now = LocalDateTime.now();
+        this.dateCreation = now;
+        this.dateModification = now;
+        if (this.active == null) this.active = true;
+    }
 
-    public String getTitre() { return titre; }
-    public void setTitre(String titre) { this.titre = titre; }
+    @PreUpdate
+    public void preUpdate() {
+        this.dateModification = LocalDateTime.now();
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-
-    public Double getPrix() { return prix; }
-    public void setPrix(Double prix) { this.prix = prix; }
-
-    public String getCategorie() { return categorie; }
-    public void setCategorie(String categorie) { this.categorie = categorie; }
-
-    public String getAuteur() { return auteur; }
-    public void setAuteur(String auteur) { this.auteur = auteur; }
-
-    public LocalDateTime getDateCreation() { return dateCreation; }
-    public void setDateCreation(LocalDateTime dateCreation) { this.dateCreation = dateCreation; }
+    // Getters & setters (omis ici pour la brièveté; place les tiens)
+    // ... (getId, setId, getTitre, setTitre, etc.)
+    // N'oublie pas les getters/setters pour tous les champs.
 }

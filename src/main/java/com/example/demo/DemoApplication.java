@@ -12,10 +12,6 @@ public class DemoApplication {
         SpringApplication.run(DemoApplication.class, args);
     }
 
-    /**
-     * Bean CORS pour autoriser le frontend (localhost:4200) durant le développement.
-     * Sans cela, le navigateur bloquera les requêtes cross-origin.
-     */
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
