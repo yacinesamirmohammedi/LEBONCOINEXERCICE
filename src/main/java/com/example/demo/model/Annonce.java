@@ -2,6 +2,8 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.apache.catalina.startup.Catalina;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -30,7 +32,7 @@ public class Annonce {
     @NotNull(message = "La catégorie est obligatoire")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 50)
-    private Categorie categorie;
+    private Catalina categorie;
 
     @NotBlank(message = "L'auteur est obligatoire")
     @Column(nullable = false)

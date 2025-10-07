@@ -1,9 +1,12 @@
-package com.example.demo.web.dto;
+package com.example.demo.dtos;
 
 import com.example.demo.model.Categorie;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Data
 public class AnnonceResponseDTO {
 
     private Long id;

@@ -1,9 +1,17 @@
-package com.example.demo.web.dto;
+package com.example.demo.dtos;
 
 import com.example.demo.model.Categorie;
 import jakarta.validation.constraints.*;
+import jdk.jfr.DataAmount;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 
+
+
+@Data
 public class AnnonceRequestDTO {
 
     @NotBlank
@@ -31,5 +39,5 @@ public class AnnonceRequestDTO {
     // optionnel, peut être null -> true par défaut
     private Boolean active;
 
-    // getters & setters (constructors si besoin)
+
 }
